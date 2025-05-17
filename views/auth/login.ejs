@@ -1,0 +1,26 @@
+<%- include('../partials/header') %>
+
+<div style="display: flex; justify-content: center; align-items: center; min-height: 70vh;">
+    <div class="card" style="width: 100%; max-width: 450px;">
+        <div class="card-header text-center">
+            <h2><i class="fas fa-lock"></i> Login Akun</h2>
+            <p style="color:var(--text-color-muted); font-size:0.9rem;">Masuk untuk melanjutkan ke AlphaPanel X.</p>
+        </div>
+        <form action="/auth/login" method="POST" class="form-modern">
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Alamat Email</label>
+                <input type="email" id="email" name="email" required placeholder="contoh@email.com">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-key"></i> Kata Sandi</label>
+                <input type="password" id="password" name="password" required placeholder="••••••••">
+            </div>
+            <div class="form-actions" style="text-align:center;">
+                <button type="submit" class="btn-alpha btn-primary" style="width:100%;"><i class="fas fa-sign-in-alt"></i> Login Sekarang</button>
+            </div>
+        </form>
+        <p class="text-center mt-1" style="font-size:0.9rem;">Belum punya akun? <a href="/auth/register">Register di sini</a></p>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
