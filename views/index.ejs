@@ -1,0 +1,62 @@
+<%- include('partials/header') %>
+
+<div class="hero-section-alpha">
+    <h1>welcome back WFC PTERO</h1>
+    <p>kebutuhan panel pterodactyl, anti diley, fresh, dan mudah dikelola.</p>
+    <% if (!user || !user.userId) { %>
+        <a href="/auth/register" class="btn-alpha btn-secondary"><i class="fas fa-user-plus"></i> daftar</a>
+        <a href="/auth/login" class="btn-alpha btn-primary" style="margin-left:10px;"><i class="fas fa-sign-in-alt"></i> Login</a>
+    <% } else { %>
+         <a href="/reseller/dashboard" class="btn-alpha btn-primary"><i class="fas fa-rocket"></i> ke dashboard panel</a>
+    <% } %>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>status akun anda</h2>
+    </div>
+    <% if (user && user.userId) { %>
+        <p class="status-message <% if (user.role === 'user' && !user.isApproved) { %>pending<% } else if (user.role === 'reseller' && user.isApproved) { %>approved<% } else if (user.role === 'admin') { %>admin<% } %>">
+            <i class="fas fa-user-shield"></i>
+            login sebagai: <strong><%= user.username %></strong> (<%= user.role %>).
+            <% if (user.role === 'user' && !user.isApproved) { %>
+                akun anda sedang menunggu persetujuan admin untuk menjadi reseller.
+            <% } else if (user.role === 'reseller' && user.isApproved) { %>
+                anda adalah reseller aktif. <a href="/reseller/dashboard">kunjungi dashboard reseller</a>.
+            <% } else if (user.role === 'admin') { %>
+                anda adalah administrator. <a href="/admin/dashboard">Kunjungi Dashboard admin</a>.
+            <% } %>
+        </p>
+    <% } else { %>
+        <p class="status-message info">
+            <i class="fas fa-info-circle"></i>
+            silakan <a href="/auth/login">login</a> untuk mengakses fitur atau <a href="/auth/register">register</a> jika Anda belum memiliki akun.
+        </p>
+    <% } %>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header">
+        <h3>Fitur Unggulan <i class="fas fa-star" style="color: #f1c40f;"></i></h3>
+    </div>
+    <div class="form-grid" style="gap:1rem;">
+        <div style="background: rgba(52, 152, 219, 0.1); padding:1rem; border-radius:var(--border-radius); text-align:center;">
+            <i class="fas fa-bolt fa-2x" style="color:var(--primary-color); margin-bottom:0.5rem;"></i>
+            <h4>Performa Cepat</h4>
+            <p style="font-size:0.9rem; color:var(--text-color-muted);">Infrastruktur Pterodactyl yang dioptimalkan.</p>
+        </div>
+        <div style="background: rgba(46, 204, 113, 0.1); padding:1rem; border-radius:var(--border-radius); text-align:center;">
+            <i class="fas fa-shield-alt fa-2x" style="color:var(--secondary-color); margin-bottom:0.5rem;"></i>
+            <h4>Keamanan Terjamin</h4>
+            <p style="font-size:0.9rem; color:var(--text-color-muted);">Proteksi DDoS dan backup rutin.</p>
+        </div>
+        <div style="background: rgba(230, 126, 34, 0.1); padding:1rem; border-radius:var(--border-radius); text-align:center;">
+            <i class="fas fa-headset fa-2x" style="color:#e67e22; margin-bottom:0.5rem;"></i>
+            <h4>Support 24/7</h4>
+            <p style="font-size:0.9rem; color:var(--text-color-muted);">Tim kami siap membantu kapan saja.</p>
+        </div>
+    </div>
+</div>
+
+
+<%- include('partials/footer') %>
