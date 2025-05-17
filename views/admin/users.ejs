@@ -1,0 +1,61 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-users"></i> Manajemen Pengguna</h2>
+    </div>
+    <% if (users.length > 0) { %>
+        <div class="table-wrapper">
+            <table class="table-alpha">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-user"></i> Username</th>
+                        <th><i class="fas fa-at"></i> Email</th>
+                        <th><i class="fas fa-user-tag"></i> Role</th>
+                        <th><i class="fas fa-check-double"></i> Approved</th>
+                        <th><i class="fas fa-fingerprint"></i> Ptero User ID</th>
+                        <th><i class="fas fa-tools"></i> Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(function(u) { %>
+                        <tr>
+                            <td><strong><%= u.username %></strong></td>
+                            <td><%= u.email %></td>
+                            <td style="text-transform:capitalize;"><%= u.role %></td>
+                            <td>
+                                <% if (u.isApproved) { %><span class="text-success"><i class="fas fa-check-circle"></i> Ya</span><% } else { %><span class="text-warning"><i class="fas fa-times-circle"></i> Tidak</span><% } %>
+                            </td>
+                            <td>
+                                <form action="/admin/users/<%= u._id %>/set-ptero-id" method="POST" class="inline-form">
+                                    <input type="number" name="pterodactylUserId" value="<%= u.pterodactylUserId || '' %>" placeholder="ID" class="form-group ptero-id-input" style="margin-bottom:0;">
+                                    <button type="submit" class="btn-alpha btn-sm btn-info"><i class="fas fa-save"></i></button>
+                                </form>
+                            </td>
+                            <td>
+                                <% if (u.role !== 'admin') { %>
+                                    <% if (!u.isApproved || u.role === 'user') { %>
+                                        <form action="/admin/users/<%= u._id %>/approve" method="POST" style="display: inline;">
+                                            <button type="submit" class="btn-alpha btn-sm btn-success"><i class="fas fa-user-check"></i> Approve</button>
+                                        </form>
+                                    <% } %>
+                                    <% if (u.isApproved && u.role === 'reseller') { %>
+                                        <form action="/admin/users/<%= u._id %>/reject" method="POST" style="display: inline;">
+                                            <button type="submit" class="btn-alpha btn-sm btn-warning"><i class="fas fa-user-times"></i> Cabut</button>
+                                        </form>
+                                    <% } %>
+                                <% } else { %>
+                                    <span style="color:var(--text-color-muted);"><i class="fas fa-crown"></i> Admin</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } else { %>
+        <p class="status-message info"><i class="fas fa-info-circle"></i> Belum ada user terdaftar (selain mungkin admin awal).</p>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>
