@@ -1,0 +1,91 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-server"></i> Reseller Panel Dashboard</h2>
+    </div>
+    <p>Selamat datang, Reseller <strong><%= user.username %></strong>! Dari sini Anda bisa membuat dan mengelola panel server Pterodactyl.</p>
+
+    <% if (!user.pterodactylUserId) { %>
+        <div class="alert alert-warning mt-1" role="alert" style="color: #856404; opacity:1; transform:none; animation:none;">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Penting:</strong> Akun Anda belum memiliki Pterodactyl User ID yang terhubung. Anda tidak akan bisa membuat panel sampai admin mengaturkan ID ini untuk Anda.
+        </div>
+    <% } %>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header">
+        <h3><i class="fas fa-plus-circle"></i> Buat Panel Server Baru</h3>
+    </div>
+    <form action="/reseller/create-panel" method="POST" class="form-modern">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="panelName"><i class="fas fa-signature"></i> Nama Panel Server:</label>
+                <input type="text" id="panelName" name="panelName" required placeholder="Contoh: My Epic Minecraft Server">
+            </div>
+            <div class="form-group">
+                <label for="panelDescription"><i class="fas fa-align-left"></i> Deskripsi Panel (Opsional):</label>
+                <input type="text" id="panelDescription" name="panelDescription" placeholder="Deskripsi singkat untuk server Anda">
+            </div>
+        </div>
+
+        <h4 class="mt-2"><i class="fas fa-microchip"></i> Konfigurasi Sumber Daya</h4>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="cpuLimit">CPU Limit (%):</label>
+                <input type="number" id="cpuLimit" name="cpuLimit" value="100" min="0" max="800" step="10" required>
+                <small>0 untuk unlimited. 100% = 1 core CPU.</small>
+            </div>
+            <div class="form-group">
+                <label for="memoryLimit">RAM (MB):</label>
+                <input type="number" id="memoryLimit" name="memoryLimit" value="1024" min="0" max="102400" step="128" required>
+                <small>1024MB = 1GB. 0 untuk unlimited.</small>
+            </div>
+            <div class="form-group">
+                <label for="diskLimit">Disk (MB):</label>
+                <input type="number" id="diskLimit" name="diskLimit" value="5120" min="0" max="102400" step="1024" required>
+                <small>5120MB = 5GB. 0 untuk unlimited.</small>
+            </div>
+        </div>
+
+        <h4 class="mt-2"><i class="fas fa-cog"></i> Konfigurasi Pterodactyl</h4>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="locationId"><i class="fas fa-map-marker-alt"></i> ID Lokasi Pterodactyl:</label>
+                <input type="number" id="locationId" name="locationId" value="<%= env.PTERO_DEFAULT_LOCATION_ID || 1 %>" required>
+            </div>
+            <div class="form-group">
+                <label for="eggId"><i class="fas fa-egg"></i> ID Egg Pterodactyl:</label>
+                <input type="number" id="eggId" name="eggId" value="<%= env.PTERO_DEFAULT_EGG_ID || 5 %>" required>
+            </div>
+            <div class="form-group">
+                <label for="nodeId"><i class="fas fa-network-wired"></i> ID Node Pterodactyl (Opsional):</label>
+                <input type="number" id="nodeId" name="nodeId" value="<%= env.PTERO_DEFAULT_NODE_ID || '' %>" placeholder="Kosongkan untuk otomatis">
+                <small>Jika kosong, Pterodactyl akan memilih node berdasarkan Lokasi.</small>
+            </div>
+        </div>
+
+        <h4 class="mt-2"><i class="fas fa-sliders-h"></i> Variabel Lingkungan Egg (Contoh)</h4>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="envServerJarFile">SERVER_JARFILE (Nama file .jar):</label>
+                <input type="text" id="envServerJarFile" name="environment[SERVER_JARFILE]" value="server.jar">
+            </div>
+            <div class="form-group">
+                <label for="envMinecraftVersion">MINECRAFT_VERSION (Versi Minecraft):</label>
+                <input type="text" id="envMinecraftVersion" name="environment[MINECRAFT_VERSION]" value="latest">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-alpha btn-primary btn-submit-panel" <%= !user.pterodactylUserId ? 'disabled' : '' %>>
+                <i class="fas fa-rocket"></i> Buat Panel Server Sekarang
+            </button>
+            <% if (!user.pterodactylUserId) { %>
+                <small class="d-block text-danger mt-1"><i class="fas fa-exclamation-circle"></i> Tombol dinonaktifkan karena Pterodactyl User ID Anda belum diatur oleh Admin.</small>
+            <% } %>
+        </div>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>
